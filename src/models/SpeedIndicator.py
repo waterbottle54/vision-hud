@@ -21,7 +21,9 @@ class Line:
 class Needle:
     def __init__(self, img):
         self.img = img
-        self.contour = VisionUtils.find_largest_contour(img, (170, 70, 50), (180, 255, 255))      # red one
+        self.contour = VisionUtils.find_largest_contour(img, (160, 120, 80), (180, 255, 255))      # red one
+        if self.contour is None:
+            raise Exception('Needle contour is None')
         self.line = Line(*VisionUtils.get_terminal_points(self.contour))
 
     def draw(self, img):
@@ -30,20 +32,19 @@ class Needle:
 class Ticks:
     def __init__(self, img):
         self.img = img
-        self.contours = VisionUtils.find_contours(img, (0, 0, 200), (180, 40, 255))              # white ones
+        self.contours = VisionUtils.find_contours(img, (15, 80, 80), (40, 255, 255))              # white ones
         self.lines = map(lambda contour: Line(*VisionUtils.get_terminal_points(contour)), self.contours)
 
     def draw(self, img):
         for line in self.lines:
-            line.draw(img, radius_ends=4, color=(128, 128, 128))
+            line.draw(img, radius_ends=4, color=(64, 64, 128))
 
 class SpeedIndicator:
-
     def __init__(self, img):
         self.needle = Needle(img)
-        self.ticks = Ticks(img)
+       # self.ticks = Ticks(img)
 
     def draw(self, img): 
         # draw needle
         self.needle.draw(img)
-        self.ticks.draw(img)
+        #elf.ticks.draw(img)
